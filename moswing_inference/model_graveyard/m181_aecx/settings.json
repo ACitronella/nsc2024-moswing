@@ -1,0 +1,12 @@
+{
+    "model_name": "m181_aecx.h5",
+    "habitat_setting": "AeCx",
+    "thresholds": {
+        "Ae.Aegypti.M": 0.148,
+        "Ae.Aegypti.F": 0.148,
+        "Ae.Albopictus.M": 0.148,
+        "Ae.Albopictus.F": 0.148,
+        "Cx.Quin.M": 0.148,
+        "Cx.Quin.F": 0.148
+    }
+}

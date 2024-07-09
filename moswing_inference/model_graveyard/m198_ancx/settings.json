@@ -1,0 +1,12 @@
+{
+    "model_name": "m198_ancx.h5",
+    "habitat_setting": "AnCx",
+    "thresholds": {
+        "An.Dirus.M": 0.133,
+        "An.Dirus.F": 0.133,
+        "An.Minimus.M": 0.133,
+        "An.Minimus.F": 0.133,
+        "Cx.Quin.M": 0.133,
+        "Cx.Quin.F": 0.133
+    }
+}

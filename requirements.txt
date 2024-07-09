@@ -1,0 +1,9 @@
+tensorflow==2.15.1 
+tensorflow_addons 
+librosa 
+numpy 
+matplotlib 
+pandas
+plotly
+streamlit
+tqdm

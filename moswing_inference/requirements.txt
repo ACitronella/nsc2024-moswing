@@ -1,0 +1,7 @@
+python=3.10.12
+tensorflow=2.15.1 
+tensorflow_addons 
+librosa 
+numpy 
+matplotlib 
+pandas 
