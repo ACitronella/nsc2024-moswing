@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import numpy as np
 import pandas as pd
@@ -6,17 +7,26 @@ from moswing_inference.model_utils import model_predict, load_class_label, load_
 from moswing_inference.sound_utils import DEFAULT_SR, load_sound, preprocess_file
 from moswing_inference.plot_utils import plotly_overlap_prediction, binary_y
 
-model_setting_dir = "moswing_inference/model_graveyard/m181_aecx" 
-sound_dir = "moswing_inference/test_sound/SED-Test"
+model_setting_dir = "moswing_inference/model_graveyard"
+selected_model = st.selectbox("Select a SED model", os.listdir(model_setting_dir))
+if selected_model is None: 
+    exit(1)
+model_setting_dir = os.path.join(model_setting_dir, selected_model)
 
-ms = load_model_setting(model_setting_dir)
+file_list = st.file_uploader("Upload sound file (.wav only)", accept_multiple_files=True)
+
+try:
+    ms = load_model_setting(model_setting_dir)
+except Exception as e:
+    print(e)
+    st.write("The selected model setting cannot be load properly.")
+    exit(1)
 model = load_model(ms)
 thres = load_thres(ms)
 class_labels = load_class_label(ms)
 labels = list(class_labels.keys())
 labels = sorted(labels, key=lambda val: class_labels[val])
 
-file_list = st.file_uploader("Upload sound file (.wav only)", accept_multiple_files=True)
 if file_list: 
     filtered_file = [f for f in file_list if str(f.name).lower().endswith(".wav")]
     file_names = (str(f.name) for f in filtered_file)
