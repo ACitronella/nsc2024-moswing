@@ -12,8 +12,9 @@ pip install -r requirements.txt
 
 ## Run
 
+By default streamlit has a constrain that it restricts the size of uploaded file to 200 MB. We can change that by adding a tag `server.maxUploadSize` to something else beside 200.
 ```
-streamlit run main.py
+streamlit run main.py --server.maxUploadSize 200
 ```
 
 Note: There is a constrain that the model only works on the sound with length modulo of 10 (10s, 20s, 30s). If the sound with non-modulo of 10 is present, the model will cut of the non-divisible duration of the sound and only predict on the first divisible chunk. For instance, the sound with 105 seconds will be used by the model only 100 seconds and leave the 5 seconds untouch.

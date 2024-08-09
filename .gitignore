@@ -1,1 +1,3 @@
 moswing_inference/test_sound
+__pycache__
+data.json

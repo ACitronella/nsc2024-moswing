@@ -49,10 +49,10 @@ def plot_overlap_prediction(y_true=None, y_pred=None, class_labels=None, fig_tit
 
 def plotly_overlap_prediction(y_true=None, y_pred=None, class_labels=None, fig_title=None, duration_each_datapoint=0.3, save_path=None, thresholds=None):
     assert class_labels is not None
-    if y_true is not None:
-        if thresholds is not None:
-            y_true = binary_y(y_true, thresholds)
-        reshaped_y_true = np.reshape(y_true, (-1, len(class_labels))) > 0.5 # training set
+    # if y_true is not None:
+    #     if thresholds is not None:
+    #         y_true = binary_y(y_true, thresholds)
+    #     reshaped_y_true = np.reshape(y_true, (-1, len(class_labels))) > 0.5 # training set
     if y_pred is not None:
         if thresholds is not None:
             y_pred = binary_y(y_pred, thresholds)
@@ -63,5 +63,5 @@ def plotly_overlap_prediction(y_true=None, y_pred=None, class_labels=None, fig_t
     df = pd.DataFrame({"time (s)": argwhered_pred[:, 0],
                        "species": argwhered_pred[:, 1]})
     df["species"] = df["species"].apply(lambda cls: anti_class_labels[cls])
-    return px.scatter(df, x="time (s)", y="species", color="species", title=fig_title)
+    return px.scatter(df, x="time (s)", y="species", color="species")
     
