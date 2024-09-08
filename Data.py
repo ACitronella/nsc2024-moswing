@@ -5,8 +5,11 @@ from datetime import date, datetime
 class JsonDataStore:
     def __init__(self, DB_PATH):
         self.DB_PATH = DB_PATH
-        if not os.path.exists(DB_PATH) and not os.path.isfile(DB_PATH):
-            raise FileNotFoundError(f"{DB_PATH} is not file or not exist.") # maybe create a file here with "{}" as a content
+        if not os.path.exists(DB_PATH):
+            with open(DB_PATH, "w") as f:
+                f.write("{}")
+        elif not os.path.isfile(DB_PATH):
+            raise Exception("The DB PATH is point to non file.")
         self.obj = load_data_instance(DB_PATH)
 
 def load_data_instance(DB_PATH:str) -> dict:
@@ -20,8 +23,8 @@ def store_data_instance(db:JsonDataStore):
 
 def add_location_to_data_instance(db:JsonDataStore, file_name:str, location:dict, date_:date):
     d = {
-            "location": location,
-            "timestamp": datetime(date_.year, date_.month, date_.day).timestamp()
+        "location": location,
+        "timestamp": datetime(date_.year, date_.month, date_.day).timestamp()
     }
     db.obj[file_name] = d
     store_data_instance(db)

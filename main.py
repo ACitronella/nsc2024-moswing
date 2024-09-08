@@ -3,14 +3,14 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+import copy
+from datetime import date, timedelta, datetime
+
+from Data import add_location_to_data_instance, JsonDataStore
 from GeoLocationFinder import find_latlong
 from moswing_inference.model_utils import model_predict, load_class_label, load_thres, load_model, load_model_setting, DURATION_EACH_DATAPOINT
 from moswing_inference.sound_utils import DEFAULT_SR, load_sound, preprocess_file
 from moswing_inference.plot_utils import plotly_overlap_prediction, binary_y
-import plotly.graph_objs as go
-import copy
-from Data import add_location_to_data_instance, JsonDataStore
-from datetime import date, timedelta, datetime
 
 DB_PATH = "data.json"
 MODEL_SETTING_DIR = "moswing_inference/model_graveyard"
@@ -97,8 +97,10 @@ def file_uploader_callback():
 
 columns_to_be_shown = ["file_name", "location_text", "lat", "lon", "date"]
 location_list:list[dict] = [v["location"] | {"timestamp": v["timestamp"], "file_name": k} for k, v in db.obj.items()]
-location_df = pd.DataFrame(location_list)
-location_df["date"] = location_df["timestamp"].apply(date.fromtimestamp)
+is_location_empty = len(location_list) == 0
+if not is_location_empty:
+    location_df = pd.DataFrame(location_list, columns=["location_text", "lat", "lon", "timestamp"])
+    location_df["date"] = location_df["timestamp"].apply(date.fromtimestamp)
 
 st.set_page_config(layout="wide", page_title="MosWing: Inference")
 if "plot_list" not in st.session_state:
@@ -147,7 +149,8 @@ with st.container(border=True):
     )    
     if len(st.session_state.dates_on_map) == 2:
         start_date, end_date = st.session_state.dates_on_map
-        st.session_state.filtered_location_df = location_df[location_df["date"].apply(lambda x: x >= start_date and x <= end_date)]
+        if not is_location_empty:
+            st.session_state.filtered_location_df = location_df[location_df["date"].apply(lambda x: x >= start_date and x <= end_date)]
 
     st.map(st.session_state.filtered_location_df)
     st.dataframe(st.session_state.filtered_location_df[columns_to_be_shown], use_container_width=True)
